@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>英语单词强制学习</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>英语单词强制学习</h1>
+      <p class="hint">看到英文后，必须写出中文翻译。错了会被重复追问，直到记住。</p>
+
+      <section class="card">
+        <div class="word">{{ word.word }}</div>
+
+        <form method="post" action="/submit" class="answer-form">
+          <input type="text" name="answer" placeholder="输入中文翻译" autocomplete="off" required autofocus />
+          <button type="submit">提交</button>
+        </form>
+
+        {% if result %}
+          {% if result.is_correct %}
+            <p class="ok">✅ 正确！继续下一个。</p>
+          {% else %}
+            <p class="bad">❌ 错误。正确答案：{{ result.expected }}（该词累计错误 {{ result.mistakes }} 次）</p>
+          {% endif %}
+        {% endif %}
+
+        <div class="progress">
+          <span>词库总数：{{ progress.total }}</span>
+          <span>当前队列：{{ progress.remaining }}</span>
+          <span>累计待消除错误：{{ progress.active_mistakes }}</span>
+        </div>
+
+        <form method="post" action="/reset">
+          <button class="reset" type="submit">重置学习进度</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
